@@ -6,7 +6,37 @@ A complete single-cycle RISC-V processor implementation designed to perform a me
 
 This project implements a search-and-replace algorithm on a custom RISC-V processor architecture. The program scans through an array of 100 elements stored in memory, identifies all occurrences of a specific target value (0x14), replaces them with a designated replacement value (0xFEEDFEED), and maintains a count of all replacements made.
 
+## Directory Structure
+
+```
+/
+├── src/                      # Source code for the implementation
+│   ├── Single_Cycle_Top.v    # Top-level module
+│   ├── Single_Cycle_Core.v   # Core processor implementation
+│   ├── Core_Datapath.v       # Datapath implementation
+│   ├── Control_Unit.v        # Control logic
+│   └── ...                   # Other implementation files
+├── test/                     # Test files
+│   ├── testbench.v           # Main testbench
+│   └── input_numbers.txt     # Memory initialization data
+├── images/                   # Documentation images
+│   ├── hardware_architecture.png  # Hardware architecture diagram
+│   └── algorithm_workflow.png     # Algorithm workflow diagram
+├── docs/                     # Additional documentation
+└── README.md                 # This file
+```
+
 ## Architecture
+
+### Hardware Architecture
+![RISC-V Hardware Architecture](images/hardware_architecture.png)
+
+The diagram above shows the core hardware components of our RISC-V processor implementation and their interconnections. The implementation follows the classic single-cycle RISC-V architecture with:
+- Program Counter driving instruction fetch
+- Control Unit decoding instructions and generating control signals
+- Register File storing operands and results
+- ALU performing arithmetic and logical operations
+- Data Memory storing the array and program data
 
 ### Memory Layout
 - Address 0: Number of elements in the array (N = 100)
@@ -40,18 +70,26 @@ The implementation consists of the following key components:
 
 ## Algorithm Workflow
 
+![Search and Replace Algorithm Workflow](images/algorithm_workflow.png)
+
+The flowchart above illustrates the complete workflow of our search-and-replace algorithm:
+
 1. Initialize loop index (i) starting at 1 and counter at 0
 2. Load the number of elements (N) from memory address 0
 3. Load target value from memory address 101
 4. Load replacement value from memory address 102
 5. For each element from index 1 to N:
+   - Calculate memory address for the current element
    - Load the current value from memory
    - Compare with target value
    - If matching, replace with replacement value and increment counter
+   - Increment loop index regardless of match
 6. Store the final counter value at memory address 103
+7. End program execution
 
 ## Implementation Files
 
+### Verilog Modules
 - `Single_Cycle_Top.v`: Top-level module connecting all components
 - `Single_Cycle_Core.v`: Core processor implementation
 - `Core_Datapath.v`: Datapath implementation
@@ -69,7 +107,14 @@ The implementation consists of the following key components:
 - `PC_Mux.v`: PC multiplexer
 - `ALU_Mux.v`: ALU input multiplexer
 - `Result_Mux.v`: Result multiplexer
+
+### Supporting Files
 - `input_numbers.txt`: Input data for memory initialization
+- `testbench.v`: Comprehensive testbench for verification
+
+### Documentation
+- `hardware_architecture.png`: Visual representation of the processor's hardware components
+- `algorithm_workflow.png`: Flowchart showing the search-and-replace algorithm execution
 
 ## RISC-V Assembly Implementation
 
@@ -127,15 +172,32 @@ JAL x0, DONE       // Infinite loop to halt
 ## Setup and Simulation
 
 ### Requirements
-- Icarus Verilog (iverilog)
+- Icarus Verilog (iverilog) - Version 11.0 or newer recommended
 - VVP simulation runtime
+- GTKWave (optional, for viewing waveforms)
 
 ### Compilation and Simulation
 Use the following commands to compile and simulate the design:
 
 ```bash
-iverilog -o riscv_sim testbench.v Single_Cycle_Top.v Single_Cycle_Core.v Core_Datapath.v Control_Unit.v Main_Decoder.v ALU_decoder.v ALU.v Register_File.v Instruction_Memory.v Data_Memory.v Extend.v PC.v PC_Plus_4.v PC_Target.v PC_Mux.v ALU_Mux.v Result_Mux.v
+# Clone the repository
+git clone https://github.com/yourusername/riscv-search-replace.git
+cd riscv-search-replace
+
+# Compile the design
+iverilog -o riscv_sim test/testbench.v src/*.v
+
+# Run the simulation
 vvp riscv_sim
+
+# View waveforms (optional)
+# gtkwave waveform.vcd
+```
+
+You can also use the included compile script:
+
+```bash
+./compile.sh
 ```
 
 ## Results and Verification
@@ -147,9 +209,16 @@ After execution, the memory contents will show:
 
 ## Performance Analysis
 
+### Execution Metrics
 - **Instruction Count**: 21 instructions total (5 initialization, 11 in main loop, 5 finalization)
 - **Execution Time**: ~1110 cycles for 100 elements (5 + 11*100 + 5)
 - **Memory Usage**: ~500 bytes total (84 bytes instructions, 416 bytes data)
+
+### Hardware Utilization
+The single-cycle implementation prioritizes simplicity over performance, with each instruction taking exactly one clock cycle to execute. This design choice provides predictable timing but doesn't optimize for throughput.
+
+### Performance Bottlenecks
+The main performance bottleneck in this implementation is the memory access pattern, with each iteration of the search loop requiring multiple memory operations. Advanced implementations could leverage caching or pipelining to improve throughput.
 
 ## Future Improvements
 
