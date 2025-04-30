@@ -6,26 +6,6 @@ A complete single-cycle RISC-V processor implementation designed to perform a me
 
 This project implements a search-and-replace algorithm on a custom RISC-V processor architecture. The program scans through an array of 100 elements stored in memory, identifies all occurrences of a specific target value (0x14), replaces them with a designated replacement value (0xFEEDFEED), and maintains a count of all replacements made.
 
-## Directory Structure
-
-```
-/
-├── src/                      # Source code for the implementation
-│   ├── Single_Cycle_Top.v    # Top-level module
-│   ├── Single_Cycle_Core.v   # Core processor implementation
-│   ├── Core_Datapath.v       # Datapath implementation
-│   ├── Control_Unit.v        # Control logic
-│   └── ...                   # Other implementation files
-├── test/                     # Test files
-│   ├── testbench.v           # Main testbench
-│   └── input_numbers.txt     # Memory initialization data
-├── images/                   # Documentation images
-│   ├── hardware_architecture.png  # Hardware architecture diagram
-│   └── algorithm_workflow.png     # Algorithm workflow diagram
-├── docs/                     # Additional documentation
-└── README.md                 # This file
-```
-
 ## Architecture
 
 ### Hardware Architecture
