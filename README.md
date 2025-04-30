@@ -29,7 +29,7 @@ This project implements a search-and-replace algorithm on a custom RISC-V proces
 ## Architecture
 
 ### Hardware Architecture
-![RISC-V Hardware Architecture](images/hardware_architecture.png)
+![RISC-V Hardware Architecture](1.png)
 
 The diagram above shows the core hardware components of our RISC-V processor implementation and their interconnections. The implementation follows the classic single-cycle RISC-V architecture with:
 - Program Counter driving instruction fetch
@@ -70,7 +70,7 @@ The implementation consists of the following key components:
 
 ## Algorithm Workflow
 
-![Search and Replace Algorithm Workflow](images/algorithm_workflow.png)
+![Search and Replace Algorithm Workflow](2.png)
 
 The flowchart above illustrates the complete workflow of our search-and-replace algorithm:
 
